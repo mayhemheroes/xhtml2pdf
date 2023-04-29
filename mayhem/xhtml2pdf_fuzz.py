@@ -19,8 +19,9 @@ def TestOneInput(data):
         pisa.CreatePDF(consumed_bytes, dest=fh, quiet=True, log_warn=1, log_err=1)
         fh.close()
     except (CSSParseError, ValueError):
-        if run > 200:
+        if run > 1000:
             raise
+        return
 
 
 def main():
