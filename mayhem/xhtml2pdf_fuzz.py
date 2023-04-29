@@ -1,28 +1,34 @@
 #!/usr/bin/env python3
 
-from xhtml2pdf import pisa             # import python module
+import sys
+import atheris
 
-# Define your data
-source_html = "<html><body><p>To PDF or not to PDF</p></body></html>"
-output_filename = "test.pdf"
+with atheris.instrument_imports(include=['xhtml2pdf']):
+    from xhtml2pdf.w3c.cssParser import CSSParseError
+    from xhtml2pdf import pisa
 
-# Utility function
-def convert_html_to_pdf(source_html, output_filename):
-    # open output file for writing (truncated binary)
-    result_file = open(output_filename, "w+b")
 
+def TestOneInput(data):
     # convert HTML to PDF
-    pisa_status = pisa.CreatePDF(
-            source_html,                # the HTML to convert
-            dest=result_file)           # file handle to recieve result
+    global run
+    fdp = atheris.FuzzedDataProvider(data)
+    run += 1
+    try:
+        consumed_bytes = fdp.ConsumeBytes(fdp.remaining_bytes())
+        fh = open('/dev/null', 'wb')
+        pisa.CreatePDF(consumed_bytes, dest=fh, quiet=True, log_warn=1, log_err=1)
+        fh.close()
+    except (CSSParseError, ValueError):
+        if run > 200:
+            raise
 
-    # close output file
-    result_file.close()                 # close output file
 
-    # return False on success and True on errors
-    return pisa_status.err
+def main():
+    atheris.Setup(sys.argv, TestOneInput)
+    atheris.Fuzz()
+
 
 # Main program
 if __name__ == "__main__":
-    pisa.showLogging()
-    convert_html_to_pdf(source_html, output_filename)
+    run = 0
+    main()

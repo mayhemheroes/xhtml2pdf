@@ -4,5 +4,5 @@ testsuite:
     - file://mayhem/testsuite
 
 cmds:
-  - cmd: xhtml2pdf -q -s @@ output.pdf
+  - cmd: /src/mayhem/xhtml2pdf_fuzz.py
     libfuzzer: true
