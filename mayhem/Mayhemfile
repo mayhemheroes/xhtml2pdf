@@ -5,3 +5,4 @@ testsuite:
 
 cmds:
   - cmd: xhtml2pdf -q -s @@ output.pdf
+    libfuzzer: true
