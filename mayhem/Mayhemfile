@@ -1,0 +1,7 @@
+project: xhtml2pdf
+target: xhtml2pdf-fuzz
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: xhtml2pdf -q -s @@ output.pdf
