@@ -12,7 +12,6 @@ def TestOneInput(data):
     # convert HTML to PDF
     global fh
     fdp = atheris.FuzzedDataProvider(data)
-    run += 1
     try:
         consumed_bytes = fdp.ConsumeBytes(fdp.remaining_bytes())
         pisa.CreatePDF(consumed_bytes, dest=fh, quiet=True, log_warn=1, log_err=1)
